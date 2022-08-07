@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"
+import "./App.scss"
+import axios from "axios"
+import { useState, useEffect } from "react"
+import Character from "./Character"
+import CharacterList from "./CharacterList"
+
+const API_URL = "https://swapi.dev/api/people/"
 
 function App() {
+  const [people, setPeople] = useState([])
+  useEffect(() => {
+    axios
+      .get(API_URL)
+      .then((res) => {
+        setPeople(res.data.results)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <div className="App">
+        <h1>Star Wars - Characters Listing</h1>
+        <div className="App-characters">
+          <Routes>
+            <Route path="/" element={<CharacterList data={people} />} />
+            <Route path="/:characterIndex" element={<Character data={people} />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  )
 }
 
-export default App;
+export default App
