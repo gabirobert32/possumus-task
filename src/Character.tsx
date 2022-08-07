@@ -1,4 +1,3 @@
-// import { useEffect, useState } from "react"
 import "./Character.scss"
 import { useParams } from "react-router-dom"
 
